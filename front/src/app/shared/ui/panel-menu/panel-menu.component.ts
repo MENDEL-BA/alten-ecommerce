@@ -3,7 +3,7 @@ import {
   } from "@angular/core";
 import { MenuItem } from "primeng/api";
   import { PanelMenuModule } from 'primeng/panelmenu';
-  
+
   @Component({
     selector: "app-panel-menu",
     standalone: true,
@@ -19,6 +19,10 @@ import { MenuItem } from "primeng/api";
             label: 'Accueil',
             icon: 'pi pi-home',
             routerLink: ['/home']
+        },{
+            label: 'Contact',
+            icon: 'pi pi-contact',
+            routerLink: ['/contact']
         },
         {
             label: 'Produits',
@@ -27,4 +31,3 @@ import { MenuItem } from "primeng/api";
         }
     ]
   }
-  
