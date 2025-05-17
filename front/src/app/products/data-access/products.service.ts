@@ -24,6 +24,7 @@ import { catchError, Observable, of, tap } from "rxjs";
     }
 
     public create(product: Product): Observable<boolean> {
+
         return this.http.post<boolean>(this.path, product).pipe(
             catchError(() => {
                 return of(true);

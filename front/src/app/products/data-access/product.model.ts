@@ -1,5 +1,5 @@
 export interface Product {
-    id: number;
+    id: number | null;
     code: string;
     name: string;
     description: string;
@@ -11,6 +11,6 @@ export interface Product {
     shellId: number;
     inventoryStatus: "INSTOCK" | "LOWSTOCK" | "OUTOFSTOCK";
     rating: number;
-    createdAt: number;
-    updatedAt: number;
+  createdAt: string | null;
+  updatedAt: string | null;
 }

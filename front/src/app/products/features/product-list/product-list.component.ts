@@ -1,18 +1,18 @@
-import { Component, OnInit, inject, signal } from "@angular/core";
-import { Product } from "app/products/data-access/product.model";
-import { ProductsService } from "app/products/data-access/products.service";
-import { ProductFormComponent } from "app/products/ui/product-form/product-form.component";
-import { ButtonModule } from "primeng/button";
-import { CardModule } from "primeng/card";
-import { DataViewModule } from 'primeng/dataview';
-import { DialogModule } from 'primeng/dialog';
+import {Component, OnInit, inject, signal} from "@angular/core";
+import {Product} from "app/products/data-access/product.model";
+import {ProductsService} from "app/products/data-access/products.service";
+import {ProductFormComponent} from "app/products/ui/product-form/product-form.component";
+import {ButtonModule} from "primeng/button";
+import {CardModule} from "primeng/card";
+import {DataViewModule} from 'primeng/dataview';
+import {DialogModule} from 'primeng/dialog';
 import {AppComponent} from "../../../app.component";
 import {FormsModule} from "@angular/forms";
 import {PaginatorModule} from "primeng/paginator";
 import {InputTextModule} from "primeng/inputtext";
 
 const emptyProduct: Product = {
-  id: 0,
+  id: null,
   code: "",
   name: "",
   description: "",
@@ -24,8 +24,8 @@ const emptyProduct: Product = {
   shellId: 0,
   inventoryStatus: "INSTOCK",
   rating: 0,
-  createdAt: 0,
-  updatedAt: 0,
+  createdAt: null,
+  updatedAt: null,
 };
 
 @Component({
@@ -46,7 +46,8 @@ export class ProductListComponent implements OnInit {
   public isCreation = false;
   public readonly editedProduct = signal<Product>(emptyProduct);
 
-  constructor(public appComponent: AppComponent) {}
+  constructor(public appComponent: AppComponent) {
+  }
 
   ngOnInit() {
     this.loadProducts();
@@ -89,16 +90,35 @@ export class ProductListComponent implements OnInit {
   }
 
   public onDelete(product: Product) {
-    this.productsService.delete(product.id).subscribe();
+    if (product.id !== null) {
+      this.productsService.delete(product.id).subscribe();
+    }
   }
 
   public onSave(product: Product) {
-    if (this.isCreation) {
-      this.productsService.create(product).subscribe();
-    } else {
-      console.debug("zeze",product);
-      this.productsService.update(product).subscribe();
-    }
+      if (this.isCreation) {
+        const newProduct = {
+          ...product,
+          createdAt: new Date().toISOString()
+        };
+        this.productsService.create(newProduct).subscribe({
+          next: () => {
+            this.loadProducts();
+          },
+          error: (err) => console.error('Erreur création produit', err)
+        });
+      } else {
+        const updatedProduct = {
+          ...product,
+          updatedAt: new Date().toISOString()
+        };
+        this.productsService.update(updatedProduct).subscribe({
+          next: () => {
+            this.loadProducts();
+          },
+          error: (err) => console.error('Erreur création produit', err)
+        });
+      }
     this.closeDialog();
   }
 
@@ -113,6 +133,7 @@ export class ProductListComponent implements OnInit {
   public addToCart(product: Product) {
     this.appComponent.addToCart(product);
   }
+
   public removeFromCart(product: Product) {
     this.appComponent.removeFromCart(product);
   }

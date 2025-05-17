@@ -26,14 +26,21 @@ public class AltenApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 	    return args -> {
-	        User user = new User();
-	        user.setUsername("testuser");
-	        user.setFirstname("Test");
-	        user.setEmail("testuser@example.com");
+			UserRepository userRepository = ctx.getBean(UserRepository.class);
 			PasswordEncoder passwordEncoder = ctx.getBean(PasswordEncoder.class);
+
+			User user = new User();
+			User useradmin = new User();
+			user.setUsername("testuser");
+			user.setFirstname("Test");
+			user.setEmail("testuser@example.com");
 			user.setPassword(passwordEncoder.encode("password123"));
-	        UserRepository userRepository = ctx.getBean(UserRepository.class);
-	        userRepository.save(user);
+			useradmin.setUsername("testadmin");
+			useradmin.setFirstname("Admin");
+			useradmin.setEmail("admin@admin.com");
+			useradmin.setPassword(passwordEncoder.encode("admin123"));
+			userRepository.save(user);
+			userRepository.save(useradmin);
 
 	        ProductRepository productRepository = ctx.getBean(ProductRepository.class);
 	        for (int i = 1; i <= 7; i++) {

@@ -21,6 +21,8 @@ public class Product {
     private int shellId;
     private String inventoryStatus;
     private int rating;
+    @Column(updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
 }
