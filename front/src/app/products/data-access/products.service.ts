@@ -34,8 +34,9 @@ import { catchError, Observable, of, tap } from "rxjs";
 
     public update(product: Product): Observable<boolean> {
         return this.http.patch<boolean>(`${this.path}/${product.id}`, product).pipe(
-            catchError(() => {
-                return of(true);
+            catchError((error ) => {
+              console.error('Erreur lors de la mise à jour du produit', error);
+              return of(false);
             }),
             tap(() => this._products.update(products => {
                 return products.map(p => p.id === product.id ? product : p)

@@ -6,6 +6,7 @@ import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
+import {AppComponent} from "../../../app.component";
 
 const emptyProduct: Product = {
   id: 0,
@@ -39,6 +40,7 @@ export class ProductListComponent implements OnInit {
   public isDialogVisible = false;
   public isCreation = false;
   public readonly editedProduct = signal<Product>(emptyProduct);
+  constructor(public appComponent: AppComponent) {}
 
   ngOnInit() {
     this.productsService.get().subscribe();
@@ -64,6 +66,7 @@ export class ProductListComponent implements OnInit {
     if (this.isCreation) {
       this.productsService.create(product).subscribe();
     } else {
+      console.debug("zeze",product);
       this.productsService.update(product).subscribe();
     }
     this.closeDialog();
@@ -75,5 +78,12 @@ export class ProductListComponent implements OnInit {
 
   private closeDialog() {
     this.isDialogVisible = false;
+  }
+
+  public addToCart(product: Product) {
+    this.appComponent.addToCart(product);
+  }
+  public removeFromCart(product: Product) {
+    this.appComponent.removeFromCart(product);
   }
 }
