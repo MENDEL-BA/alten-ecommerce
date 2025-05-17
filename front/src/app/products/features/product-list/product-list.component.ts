@@ -7,6 +7,9 @@ import { CardModule } from "primeng/card";
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
 import {AppComponent} from "../../../app.component";
+import {FormsModule} from "@angular/forms";
+import {PaginatorModule} from "primeng/paginator";
+import {InputTextModule} from "primeng/inputtext";
 
 const emptyProduct: Product = {
   id: 0,
@@ -30,20 +33,47 @@ const emptyProduct: Product = {
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.scss"],
   standalone: true,
-  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent],
+  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent, FormsModule, PaginatorModule, InputTextModule],
 })
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
-
+  rowsPerPage = 3;
+  searchQuery = '';
   public readonly products = this.productsService.products;
+  filteredProducts: Product[] = [];
 
   public isDialogVisible = false;
   public isCreation = false;
   public readonly editedProduct = signal<Product>(emptyProduct);
+
   constructor(public appComponent: AppComponent) {}
 
   ngOnInit() {
-    this.productsService.get().subscribe();
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.productsService.get().subscribe({
+      next: () => {
+        this.filteredProducts = [...this.products()];
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des produits', err);
+      }
+    });
+  }
+
+  filterProducts() {
+    if (!this.searchQuery) {
+      this.filteredProducts = [...this.products()];
+    } else {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredProducts = this.products().filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+      );
+    }
   }
 
   public onCreate() {
@@ -86,4 +116,5 @@ export class ProductListComponent implements OnInit {
   public removeFromCart(product: Product) {
     this.appComponent.removeFromCart(product);
   }
+
 }

@@ -1,8 +1,14 @@
 <h1 class="text-center">Liste des produits</h1>
 
 <p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
-
-<p-dataView #dv [value]="products()">
+<div class="p-fluid mb-4">
+    <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" [(ngModel)]="searchQuery"
+               (input)="filterProducts()" placeholder="Rechercher des produits..." />
+    </span>
+</div>
+<p-dataView #dv [value]="filteredProducts" [paginator]="true" [rows]="rowsPerPage">
     <ng-template pTemplate="list" let-products>
         @for (product of products; track product) {
             <p-card class="block mb-2">
@@ -26,7 +32,6 @@
         }
     </ng-template>
 </p-dataView>
-
 <p-dialog [(visible)]="isDialogVisible"
     [style]="{ width: '50vw' }"
     header="Ajout/Edition produit">
