@@ -8,14 +8,15 @@ import { PanelMenuComponent } from "./shared/ui/panel-menu/panel-menu.component"
 import {Button} from "primeng/button";
 import {Product} from "./products/data-access/product.model";
 import {DialogModule} from "primeng/dialog";
-import {NgForOf, NgIf} from "@angular/common";
+import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
+import {TableModule} from "primeng/table";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   standalone: true,
-  imports: [RouterModule, SplitterModule, ToolbarModule, PanelMenuComponent, Button, DialogModule, NgIf, NgForOf],
+  imports: [RouterModule, SplitterModule, ToolbarModule, PanelMenuComponent, Button, DialogModule, NgIf, NgForOf, TableModule, CurrencyPipe],
 })
 export class AppComponent {
   title = "ALTEN SHOP";
@@ -39,5 +40,25 @@ export class AppComponent {
       this.cart.splice(index, 1);
       this.cartQuantity.set(this.cart.length);
     }
+  }
+
+  getTotal(): number {
+    return this.cart.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+  }
+  
+  clearCart(): void {
+    this.cart = [];
+  }
+
+  checkout(): void {
+    // Implémentez la logique de commande
+  }
+
+  decreaseQuantity(product: any) {
+    
+  }
+
+  increaseQuantity(product: any) {
+    
   }
 }

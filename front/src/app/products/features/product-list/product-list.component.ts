@@ -10,6 +10,9 @@ import {AppComponent} from "../../../app.component";
 import {FormsModule} from "@angular/forms";
 import {PaginatorModule} from "primeng/paginator";
 import {InputTextModule} from "primeng/inputtext";
+import {CurrencyPipe, NgOptimizedImage} from "@angular/common";
+import {TagModule} from "primeng/tag";
+import {RatingModule} from "primeng/rating";
 
 const emptyProduct: Product = {
   id: null,
@@ -33,7 +36,7 @@ const emptyProduct: Product = {
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.scss"],
   standalone: true,
-  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent, FormsModule, PaginatorModule, InputTextModule],
+  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent, FormsModule, PaginatorModule, InputTextModule, CurrencyPipe, TagModule, RatingModule, NgOptimizedImage],
 })
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
@@ -136,6 +139,23 @@ export class ProductListComponent implements OnInit {
 
   public removeFromCart(product: Product) {
     this.appComponent.removeFromCart(product);
+  }
+
+  getStatusSeverity(status: string) {
+    switch (status) {
+      case 'INSTOCK': return 'success';
+      case 'LOWSTOCK': return 'warning';
+      case 'OUTOFSTOCK': return 'danger';
+      default: return 'info';
+    }
+  }
+
+  resetSearch() {
+    this.searchQuery = '';
+    this.filterProducts();
+  }
+
+  addToWishlist(product: Product) {
   }
 
 }

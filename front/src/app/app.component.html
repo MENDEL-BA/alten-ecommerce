@@ -27,15 +27,73 @@
     </ng-template>
 </p-splitter>
 
-<p-dialog [(visible)]="isCartVisible" [style]="{ width: '50vw' }" header="Contenu du Panier">
-  <div *ngIf="cart.length > 0; else emptyCart">
-    <ul>
-      <li *ngFor="let product of cart">
-        {{ product.name }} - {{ product.price }} € (Quantité: {{ product.quantity }})
-      </li>
-    </ul>
+<p-dialog [(visible)]="isCartVisible" [style]="{ width: '50vw' }" header="Contenu du Panier" [modal]="true">
+  <div *ngIf="cart.length > 0; else emptyCart" class="cart-container">
+    <p-table [value]="cart" [scrollable]="true" scrollHeight="flex">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Produit</th>
+          <th>Prix unitaire</th>
+          <th>Quantité</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>
+            <div class="flex align-items-center gap-3">
+              <img [src]="product.image || 'assets/default-product.png'"
+                   [alt]="product.name"
+                   class="product-image">
+              <span>{{ product.name }}</span>
+            </div>
+          </td>
+          <td>{{ product.price | currency:'EUR' }}</td>
+          <td>
+            <div class="flex align-items-center gap-2">
+              <p-button icon="pi pi-minus"
+                        (click)="decreaseQuantity(product)"
+                        [disabled]="product.quantity <= 1"
+                        styleClass="p-button-rounded p-button-sm"></p-button>
+              <span>{{ product.quantity }}</span>
+              <p-button icon="pi pi-plus"
+                        (click)="increaseQuantity(product)"
+                        styleClass="p-button-rounded p-button-sm"></p-button>
+            </div>
+          </td>
+          <td>{{ product.price * product.quantity | currency:'EUR' }}</td>
+          <td>
+            <p-button icon="pi pi-trash"
+                      (click)="removeFromCart(product)"
+                      styleClass="p-button-rounded p-button-danger p-button-sm"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <div class="flex justify-content-between align-items-center">
+          <p-button label="Vider le panier"
+                    icon="pi pi-times"
+                    (click)="clearCart()"
+                    styleClass="p-button-danger p-button-sm mr-2"></p-button>
+          <span class="text-sm font-bold">Total: {{ getTotal() | currency:'EUR' }}</span>
+          <p-button label="Passer commande"
+                    icon="pi pi-check"
+                    (click)="checkout()"
+                    styleClass="p-button-success p-button-sm ml-2"></p-button>
+        </div>
+      </ng-template>
+    </p-table>
   </div>
+
   <ng-template #emptyCart>
-    <p>Votre panier est vide.</p>
+    <div class="empty-cart">
+      <i class="pi pi-shopping-cart" style="font-size: 3rem; color: var(--primary-color)"></i>
+      <p class="text-xl mt-3">Votre panier est vide</p>
+      <p-button label="Parcourir les produits"
+                icon="pi pi-arrow-right"
+                (click)="isCartVisible = false"
+                styleClass="p-button-outlined mt-3"></p-button>
+    </div>
   </ng-template>
 </p-dialog>
