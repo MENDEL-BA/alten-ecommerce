@@ -43,9 +43,9 @@ export class AppComponent {
   }
 
   getTotal(): number {
-    return this.cart.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+    return this.cart.reduce((sum, product) => sum + (product.price), 0);
   }
-  
+
   clearCart(): void {
     this.cart = [];
   }
@@ -55,10 +55,10 @@ export class AppComponent {
   }
 
   decreaseQuantity(product: any) {
-    
+
   }
 
   increaseQuantity(product: any) {
-    
+
   }
 }

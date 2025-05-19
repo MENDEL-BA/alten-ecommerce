@@ -1,0 +1,95 @@
+###
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "firstname": "Test",
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+
+<> 2025-05-19T130838.200.json
+<> 2025-05-19T123826.200.json
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "admin123"
+}
+
+<> 2025-05-19T123758.200.json
+
+###
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE3NDc2NTgyNzgsImV4cCI6MTc0Nzc0NDY3OH0.XS9Z33pSLGvlRm_06AKBuuJxjJORSSBYeS8R41zlKZw
+GET http://localhost:8080/api/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+<> 2025-05-19T123818.200.json
+
+###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Test Product",
+  "description": "This is a test product.",
+  "price": 19.99,
+  "category": "Test Category"
+}
+
+###
+GET http://localhost:8080/api/products/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+PATCH http://localhost:8080/api/products/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Updated Product",
+  "description": "Updated description.",
+  "price": 29.99
+}
+
+###
+DELETE http://localhost:8080/api/products/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:8080/api/cart/add
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": 3,
+  "quantity": 1
+}
+
+###
+GET http://localhost:8080/api/cart
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+POST http://localhost:8080/api/wishlist/add
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "productId": 3
+}
+
+###
+GET http://localhost:8080/api/wishlist
+Content-Type: application/json
+Authorization: Bearer {{token}}

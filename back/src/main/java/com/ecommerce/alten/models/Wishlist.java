@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,7 +26,14 @@ public class Wishlist {
     )
     private Set<Product> products = new HashSet<>();
 
-    public void addProduct(Product product) {
+    public Wishlist addProduct(Product product) {
+        Objects.requireNonNull(product, "Product cannot be null");
 
+        if (this.products == null) {
+            this.products = new HashSet<>();
+        }
+
+        this.products.add(product);
+        return this; // Permet le method chaining
     }
 }

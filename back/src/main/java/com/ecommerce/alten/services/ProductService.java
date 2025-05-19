@@ -51,7 +51,6 @@ public class ProductService {
 
     private boolean isAdmin() {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("le mail "+currentUserEmail);
         return !"admin@admin.com".equals(currentUserEmail);
     }
 }

@@ -21,6 +21,7 @@ public class CartController {
     public ResponseEntity<Cart> addToCart(
             @AuthenticationPrincipal User user,
             @RequestBody CartItemDTO itemDTO) {
+        System.out.println("user "+user);
         Cart cart = cartService.addToCart(user.getId(), itemDTO);
         return ResponseEntity.ok(cart);
     }

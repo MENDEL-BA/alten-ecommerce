@@ -4,23 +4,34 @@ import com.ecommerce.alten.models.Product;
 import com.ecommerce.alten.models.User;
 import com.ecommerce.alten.repositories.ProductRepository;
 import com.ecommerce.alten.repositories.UserRepository;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.core.StreamWriteConstraints;
 @SpringBootApplication
 public class AltenApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AltenApplication.class, args);
+	}
+
+	@Bean
+	public ObjectMapper objectMapper() {
+		ObjectMapper mapper = JsonMapper.builder()
+				.build();
+		mapper.getFactory().setStreamWriteConstraints(
+				StreamWriteConstraints.builder().maxNestingDepth(2000).build()
+		);
+		mapper.registerModule(new JavaTimeModule());
+		return mapper;
 	}
 
 	@Bean

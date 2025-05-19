@@ -44,6 +44,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     .requestMatchers("/h2-console/**").permitAll()
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/products/**").permitAll()
+                    .requestMatchers("/api/cart/**").permitAll()
+                    .requestMatchers("/api/whislist/**").permitAll()
             )
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -7,7 +7,10 @@ import com.ecommerce.alten.models.User;
 import com.ecommerce.alten.repositories.CartRepository;
 import com.ecommerce.alten.repositories.ProductRepository;
 import com.ecommerce.alten.repositories.UserRepository;
+import com.sun.security.auth.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +20,15 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public CartService(CartRepository cartRepository,
                        ProductRepository productRepository,
-                       UserRepository userRepository) {
+                       UserRepository userRepository, CustomUserDetailsService customUserDetailsService) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     public Cart addToCart(Long userId, CartItemDTO itemDTO) {
